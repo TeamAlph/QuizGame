@@ -1,0 +1,490 @@
+.model small
+.org 100H 
+
+WindowColor    Macro X1,Y1,X2,Y2,Color
+Mov Ax,0600h
+Mov Cl,X1
+Mov Ch,Y1
+Mov Dl,X2
+Mov Dh,Y2
+Mov Bh,Color
+Int 10h
+EndM
+
+printstring     Macro       Adr
+MOV DX, OFFSET Adr
+MOV AH, 9
+INT 21h
+EndM
+goto        macro           x,y
+MOV DH, x   ;ROW
+MOV DL, y   ;COLUMN
+MOV AH, 02H
+INT 10H
+EndM
+curser      macro       x,y
+MOV DH, x   ;ROW
+MOV DL, y   ;COLUMN
+MOV AH, 02H
+INT 10H
+EndM
+printpixel      macro       x,y,color,p
+mov bh, p
+mov cx, x
+mov dx, y
+mov al, color
+mov ah, 0ch
+int 10h
+EndM
+
+delay   macro   time
+mov cx,time
+mov dx,4240h
+mov ah,086h
+int 15h
+EndM
+
+;----------------------------------data area-------------------------
+ 
+ .DATA
+yay   db " --------------    ____  ------------------------------------------------    ",13, 10
+DB       "  ******          /    \                                          ******     ", 13, 10
+DB       "  ******         /      \                                         ******     ", 13, 10
+DB       "  ******        |        |                                        ******     ", 13, 10
+DB       "  **************|        |        **************************************     ", 13, 10
+DB       "  ******        |   /\   |        * * * * * * * * * * * * * * * * ******     ", 13, 10
+DB       "  **************|  |  |  |                                        ******     ", 13, 10
+DB       "  ******        |   __\  |         ___  ___  ___ _    _ ___       ******     ", 13, 10
+DB       "  ******        |      \ |  |  | |    ) | _\ |  ||\  /||  /       ******     ", 13, 10
+DB       "  ******        \       \   |  | |  _'  | |  |__|| \/ || -        ******     ", 13, 10
+DB       "  ******         \      '\  |  | | '    |  ^)||||| '' ||'-        ******     ", 13, 10
+DB       " ---------------  \____/  \ \__/ | (___  \/ ||  ||_  _||__\ -------------     ", 13, 10
+DB       "                                                                                    ", 13, 10, '$'
+startmsg         DB    "**********LOADING**********!$"  
+lidor            DB       "Created By A LOVER LEGEND.  Inspired By ATARI.$"
+wrongb           DB       "You have clicked the wrong button!$"       
+    msg   dB  "************WELCOME TO THE QUIZ GAME*************$" 
+    msg1  dB   0dh,0ah," 1) THE COMMON CAT NAME $ "
+    msg2  db   0dh,0ah,"A)TOM   B)FABY  C)MUNNU  D)BABY $ " 
+    msg3  db   0dh,0ah,"Correct $ " 
+    msg4  db   0dh,0ah,"OHH YOU LOSE $ "  
+    msg5  db   0dh,0ah," 2) THE BIG M REPRESENT WHICH RESTRUENT  $ "
+    msg6  db   0dh,0ah,"A)KFC   B)PIZZA HUT  C)STUDENT BIRYANI  D)MACDONALDS $ " 
+    msg7  db   0dh,0ah," 3) LAW OF MOTION IS DISCOVERED BY $ "
+    msg8  db   0dh,0ah,"A)HENRY   B)MACQUINE  C)NEWTON   D)EIENSTEIN $ " 
+    msg9  db   0dh,0ah," 4) WORLD FASTEST CAR $ "
+    msg10  db   0dh,0ah,"A)LIMBORGANI   B)MERCEDES  C)AUDII   D)FERRARI $ "  
+    msg11  db   0dh,0ah," 5) HIGHER WAVE LENGTH OF COLOR $ "
+    msg12  db   0dh,0ah,"A)RED   B)BLUE  C)GREEN   D)BLACK $ "
+    msg13  db   0dh,0ah," 6)KEY BOARD SECOND NAME IS  $ "
+    msg14  db   0dh,0ah,"A)QWERTY   B)KEYBOOK  C)NOTEBOOK   D)BOOK $ " 
+    msg15  db   0dh,0ah," 7)COMPUTER UNDERSTANDS  $ "
+    msg16  db   0dh,0ah,"A)LANGUAGE   B)INSTRUCTIONS   C)KNOWLEDGE   D)BOOK $ "
+    msg17 db    0dh,0ah,"YOUR SCORE IS:$ "
+    str db 6 dup('$')
+ 
+    
+.code
+    main proc
+      MOV AL, 1 ;PAGE NUMBER
+MOV AH, 05H
+INT 10H
+
+WindowColor 0,0,80,25,01ch
+
+;PRINT "quiz game" TO SCREEN
+MOV BH, 1
+printstring yay
+
+;SET CURSOR POSITION TO STARTMSG
+goto 14,29
+
+;PRINT STARTMSG
+printstring startmsg
+
+;SET CURSOR POSITION TO lidor
+MOV BH, 1   ;PAGE
+curser  20, 20
+
+;PRINT CREATOR(LidorMotai)
+
+MOV DX, OFFSET lidor
+MOV AH, 09H
+INT 21H
+
+;SET CURSOR POSITION TO lidor
+MOV BH, 0   ;PAGE
+curser  15,40
+ 
+     ;delay
+mov bp, 120 
+
+mov si, 1
+dely1:
+dec bp
+
+jnz dely1
+      ;end deay
+     
+MOV AL, 2 ;PAGE NUMBER
+MOV AH, 05H
+INT 10H
+
+MOV AX, 101H ;changes the num of pixels to 640X480 with 16 colors
+INT 10H  
+
+MOV AL, 00 
+MOV AH, 2H
+INT 10H
+WindowColor 0,0,80,25,01ch
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;
+   
+        
+       
+    mov   ax,@data     
+    mov   ds,ax 
+    
+ mov ah, 02h
+ mov dl, 13
+ int 21h
+ mov dl, 10
+ int 21h ;NEXT LINE CODE
+    
+    MOV BX,7  
+    mov ah,09h     
+    lea dx,msg
+    int 21h 
+    
+    
+    
+    ; ; start delay
+
+mov bp, 70 
+
+mov si, 1
+delay2:
+dec bp
+
+jnz delay2
+
+; end delay
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ;  
+    
+    mov ah,09h
+    lea dx,msg1
+  
+    int 21h 
+       
+    mov ah,09h
+    lea dx,msg2
+   
+    int 21h   
+ 
+    
+    MOV AH,1
+    INT 21H
+   
+              
+    cmp al,41h  ;CHECK THE ANSWER
+    JNE wro12
+    JE rig23 
+  
+    wro12:
+           DEC BX
+         lea dx,msg4  
+          mov ah,09h
+          int 21h
+          JMP f
+              
+   
+    rig23:
+   
+   
+    lea dx,msg3
+    mov ah,09h
+    int 21h
+     
+     f:;GOTO NEXT QUESTION IF WRNG
+           
+    lea dx,msg5
+    mov ah,09h
+    int 21h 
+
+    lea dx,msg6
+    mov ah,09h
+    int 21h 
+    
+    MOV AH,1
+    INT 21H  
+    
+     cmp al,44h  ;CHECK THE ANSWER
+    JNE wrong1
+    JE right1 
+  
+    wrong1:
+            DEC BX
+         lea dx,msg4  
+          mov ah,09h
+          int 21h
+          JMP P
+              
+   
+    right1:
+     
+   
+    
+    lea dx,msg3
+    mov ah,09h
+    int 21h
+     
+     P:;GOTO NEXT QUESTION IF WRNG   
+         
+    lea dx,msg7
+    mov ah,09h
+    int 21h 
+
+    lea dx,msg8
+    mov ah,09h
+    int 21h 
+    
+    MOV AH,1
+    INT 21H 
+    
+    
+    cmp al,43h  ;CHECK THE ANSWER
+    JNE wng1
+    JE rgt1 
+  
+    wng1:
+           DEC BX
+         lea dx,msg4  
+          mov ah,09h
+          int 21h
+          JMP t
+              
+   
+    rgt1:
+    
+   
+    lea dx,msg3
+    mov ah,09h
+    int 21h
+     
+     t:;GOTO NEXT QUESTION IF WRNG 
+     
+     
+    lea dx,msg9
+    mov ah,09h
+    int 21h 
+
+    lea dx,msg10
+    mov ah,09h
+    int 21h 
+    
+    MOV AH,1
+    INT 21H 
+    
+    
+    cmp al,44h  ;CHECK THE ANSWER
+    JNE w1
+    JE r1 
+  
+    w1:
+           DEC BX
+         lea dx,msg4  
+          mov ah,09h
+          int 21h
+          JMP I
+              
+   
+    r1:
+   
+     
+    lea dx,msg3
+    mov ah,09h
+    int 21h ;   
+    
+    I:  ;GOTO NEXT QUESTION IF WRNG 
+    lea dx,msg11
+    mov ah,09h
+    int 21h 
+
+    lea dx,msg12
+    mov ah,09h
+    int 21h 
+    
+    MOV AH,1
+    INT 21H 
+    
+    
+    cmp al,41h  ;CHECK THE ANSWER
+    JNE wnog
+    JE rght 
+  
+    wnog:
+          DEC BX
+         lea dx,msg4  
+          mov ah,09h
+          int 21h
+          JMP M
+              
+   
+    rght:
+    
+    
+    lea dx,msg3
+    mov ah,09h
+    int 21h
+    ;NEXT QUESTION
+    
+     M:  ;GOTO NEXT QUESTION IF WRNG 
+    lea dx,msg13
+    mov ah,09h
+    int 21h 
+
+    lea dx,msg14
+    mov ah,09h
+    int 21h 
+    
+    MOV AH,1
+    INT 21H 
+    
+    
+    cmp al,41h  ;CHECK THE ANSWER
+    JNE wnog1
+    JE rght1 
+  
+    wnog1:
+           DEC BX
+         lea dx,msg4  
+          mov ah,09h
+          int 21h
+          JMP Q
+              
+   
+    rght1:
+    
+ 
+    lea dx,msg3
+    mov ah,09h
+    int 21h 
+     
+       Q:;GOTO NEXT QUESTION IF WRNG  
+          lea dx,msg15
+    mov ah,09h
+    int 21h 
+
+    lea dx,msg16
+    mov ah,09h
+    int 21h 
+    
+    MOV AH,1
+    INT 21H 
+    
+    
+    cmp al,42h  ;CHECK THE ANSWER
+    JNE wg1
+    JE rg1 
+  
+    wg1:
+           DEC BX
+         lea dx,msg4  
+          mov ah,09h
+          int 21h
+          JMP S
+              
+   
+    rg1:
+   
+    lea dx,msg3
+    mov ah,09h
+    int 21h 
+     
+       S:;GOTO NEXT QUESTION IF WRNG   
+       MOV AX,BX
+       call number2string
+       
+          lea dx,msg17  
+          mov ah,09h
+          int 21h 
+   mov ah,09h 
+   LEA  dX,STR
+   int 21h  
+          ;delay
+mov bp, 100 
+
+mov si, 1
+dLY2:
+dec bp
+
+jnz dLY2 
+      
+    
+   
+      
+endp
+
+    
+ proc number2string
+  mov  bx, 10 ;DIGITS ARE EXTRACTED DIVIDING BY 10.
+  mov  cx, 0 ;COUNTER FOR EXTRACTED DIGITS.
+cycle1:       
+  mov  dx, 0 ;NECESSARY TO DIVIDE BY BX.
+  div  bx ;DX:AX / 10 = AX:QUOTIENT DX:REMAINDER.
+  push dx ;PRESERVE DIGIT EXTRACTED FOR LATER.
+  inc  cx ;INCREASE COUNTER FOR EVERY DIGIT EXTRACTED.
+  cmp  ax, 0  ;IF NUMBER IS
+  jne  cycle1 ;NOT ZERO, LOOP. 
+       ;NOW RETRIEVE PUSHED DIGITS.
+  mov  si, offset str
+cycle2:  
+  pop  dx        
+  add  dl, 48 ;CONVERT DIGIT TO CHARACTER.
+  mov  [ si ], dl
+  inc  si
+  loop cycle2 
+
+    O:
+  ret
+endp  
